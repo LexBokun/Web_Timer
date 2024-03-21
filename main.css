@@ -14,15 +14,42 @@ body {
   background-color: #121212;
 }
 
-#clock {
+#timer {
   font-family: 'Orbitron', sans-serif;
   color: #ffffff;
   display: flex;
   font-size: 10vw;
-  height: 100vh;
+  height:100vh;
   justify-content: center;
   text-align: center;
   align-items: center;
-  /* paddi  ng-top: 40px;
-  padding-bottom: 40px; */
+  flex-direction: column;
+  gap:10%;
 } 
+
+button {
+  font-family: 'Orbitron', sans-serif;
+  background-color: #ffffff;
+  width: auto;
+  font-size: 7vw;
+  padding: 0 20px;
+  display: flex;
+  color: #121212;
+  border-radius: 80px;
+  border: 5px solid white;
+}
+  
+#button {
+  color: #ffffff;
+  display: flex;
+  font-size: 400px;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+} 
+
+.button:hover, .button:focus   {
+  color: #fff;
+  background: #121212;
+  transition: all .3s linear; 
+}
