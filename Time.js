@@ -1,37 +1,66 @@
-let timer = document.querySelector('.Timer');
-let startBtn = document.querySelector('.bstartBtn')
-let resetBtn = document.querySelector('.pauseBtn')
+// Time.js
 
-console.log(timer)
-console.log(startBtn)
-console.log(resetBtn)
+const timerDisplay = document.querySelector('#timer h1');
+const startPauseBtn = document.querySelector('.startPauseBtn');
+const resetBtn = document.querySelector('.resetBtn');
 
-let seconds = 0;
-let minutes = 0;
-let hours = 0;
-let interval;
+let startTime;  // Store start time for accurate calculations
+let totalElapsedTime = 0;  // Track total elapsed time
+let elapsedTime = 0;  // Track elapsed time for current session
+let intervalId;  // Hold interval ID for clear functionality
+let isRunning = false; // Flag to track timer state (running/paused)
 
-function updateTime() {
-    seconds++;
-    if (seconds === 60) {
-      minutes++;
-      seconds = 0;
-    }
-    if (minutes === 60) {
-      hours++;
-      minutes = 0;
-    }
-    reutrn`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+// Update timer display function
+function updateTimerDisplay() {
+  const totalSeconds = Math.floor((totalElapsedTime + elapsedTime) / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+
+  timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:` +
+                             `${minutes.toString().padStart(2, '0')}:` +
+                             `${seconds.toString().padStart(2, '0')}`
+}
+
+// Start/Pause timer function
+function toggleTimer() {
+  if (isRunning) {
+    totalElapsedTime += elapsedTime; // Add current session time to total time
+    clearInterval(intervalId);
+    intervalId = null;
+    isRunning = false;
+  } else {
+    startTime = Date.now();
+    intervalId = setInterval(() => {
+      elapsedTime = Date.now() - startTime; // Calculate elapsed time in milliseconds
+      updateTimerDisplay();
+    }, 1000); // Update every second
+    isRunning = true;
   }
 
-startBtn.addEventListener('click', () => {
-    interval = setInterval(updateTime, 1000);
-    startBtn.disabled = true;
-    pauseBtn.disabled = false;
-    resetBtn.disabled = false;
-  });
+  // Update button states based on timer running state
+  startPauseBtn.textContent = isRunning ? "СТОП" : "СТАРТ";
+  resetBtn.disabled = !isRunning; // Enable reset only when timer is running/paused
+}
 
-setInterval(() => {
-  let a =  document.querySelector('h1')
-  a.innerHTML = updateTime();
-}, 1000);
+// Reset timer function
+function resetTimer() {
+  clearInterval(intervalId);
+  intervalId = null;
+  totalElapsedTime = 0;
+  elapsedTime = 0;
+  updateTimerDisplay();
+  isRunning = false;
+  // Update button states
+  startPauseBtn.textContent = "СТАРТ";
+  startPauseBtn.disabled = false; // Enable start button
+  resetBtn.disabled = true;
+}
+
+// Button event listeners
+startPauseBtn.addEventListener('click', toggleTimer);
+resetBtn.addEventListener('click', resetTimer);
+
+// Initial setup when the script is loaded
+updateTimerDisplay(); // Display initial time (00:00:00)
+resetTimer(); // Reset timer to initial state
