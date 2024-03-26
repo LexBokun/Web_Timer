@@ -38,9 +38,11 @@ function toggleTimer() {
     isRunning = true;
   }
 
+  
   // Update button states based on timer running state
-  startPauseBtn.textContent = isRunning ? "СТОП" : "СТАРТ";
-  resetBtn.disabled = !isRunning; // Enable reset only when timer is running/paused
+  setTimeout(function() {
+    startPauseBtn.textContent = isRunning ? "СТОП" : "СТАРТ";
+  },70)
 }
 
 // Reset timer function
@@ -54,7 +56,6 @@ function resetTimer() {
   // Update button states
   startPauseBtn.textContent = "СТАРТ";
   startPauseBtn.disabled = false; // Enable start button
-  resetBtn.disabled = true;
 }
 
 // Button event listeners
